@@ -1,0 +1,13 @@
+tfc.capability.weight.very_light=Very Light
+tfc.capability.weight.light=Light
+tfc.capability.weight.medium=Medium
+tfc.capability.weight.heavy=Heavy
+tfc.capability.weight.very_heavy=Very Heavy
+
+tfc.capability.size.tiny=Tiny
+tfc.capability.size.very_small=Very Small
+tfc.capability.size.small=Small
+tfc.capability.size.normal=Normal
+tfc.capability.size.large=Large
+tfc.capability.size.very_large=Very Large
+tfc.capability.size.huge=Huge
