@@ -14,7 +14,7 @@ TFC's capability use a `Map<Predicate<ItemStack>, Supplier<ICapabilityProvider>>
 This means that every single time an ItemStack is created (very often), it tries every single entry, one at a time, to see if it matches the ingredient.
 On any relatively large modpack, this is very slow.
 
-This mod fixed this by indexing this map with every Item, then iterating the matches with the item linearly. This is not API-breaking (the public field is still the same and still contains the items)
+This mod fixed this by using a `Map<Item, Map<Predicate<ItemStack>, Supplier<ICapabilityProvider>>>`, then iterating the matches with the item linearly. This is not API-breaking (the public field is still the same and still contains the items)
 
 ### Worldgen
 TFC's ore generation is very slow and quite wasteful. Every vein has, on average, 6 nodes, and the chance for an ore block to generate is inversely proportional to the distance to the closest one. Every block is evaluated independantly, and every distance to every node is checked. This means a lot of distance checks.
