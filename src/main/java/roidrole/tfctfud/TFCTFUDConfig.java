@@ -9,12 +9,12 @@ public class TFCTFUDConfig {
 	public static boolean optimizeCapabilities = true;
 	public static boolean optimizeOreGen = true;
 
-	@Config.Comment("Makes the calendar shut up about errors. This does not fix the error, only silences them.")
+	@Config.Comment("Makes the calendar shut up about errors. This does not fix the errors, only silences them.")
 	public static boolean calendarShutUp = false;
 
 	@Config.Comment({
 		"Item size strings use a resource location, allowing packmakers to edit them",
-		"Translation keys are \"tfc.capability.weight.[lowercase default name]\" and \"tfc.capability.weight.[lowercase default name]\"",
+		"Translation keys are \"tfc.capability.weight.[lowercase default name]\" and \"tfc.capability.size.[lowercase default name]\"",
 		"Defaults are provided."
 	})
 	public static boolean itemSizeLocalization = false;
