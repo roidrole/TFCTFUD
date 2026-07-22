@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 	modid = Tags.MOD_ID,
 	name = Tags.MOD_NAME,
 	version = Tags.VERSION,
-	dependencies = "required-after:mixinbooter;required:terrafirmacraft;required-after:configanytime"
+	dependencies = "required-after:mixinbooter;required:tfc;required-after:configanytime"
 )
 public class TFCTFUD {
 	public static Logger LOGGER;
