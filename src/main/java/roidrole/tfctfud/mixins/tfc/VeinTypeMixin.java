@@ -29,10 +29,9 @@ public abstract class VeinTypeMixin {
 		int chunkX,
 		int chunkZ,
 		CallbackInfoReturnable<Vein> cir,
-		@Local(name = "startPos") BlockPos pos,
-		@Local(name = "rand") Random random,
+		@Local(name = "startPos") BlockPos startPos,
 		@Local(name = "grade")Ore.Grade grade
 	){
-		cir.setReturnValue(new TFUVeinCluster(pos, (VeinType)(Object) this, grade, random));
+		cir.setReturnValue(new TFUVeinCluster(startPos, (VeinType)(Object) this, grade, rand));
 	}
 }

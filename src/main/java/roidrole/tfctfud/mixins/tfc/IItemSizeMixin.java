@@ -12,12 +12,12 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Mixin(IItemSize.class)
+@SideOnly(Side.CLIENT)
 public interface IItemSizeMixin extends IItemSize{
 	/**
 	 * @author roidrole
 	 * @reason Item size info use a translation key
 	 */
-	@SideOnly(Side.CLIENT)
 	@Overwrite(remap = false)
 	default void addSizeInfo(@Nonnull ItemStack stack, @Nonnull List<String> text){
 		text.add(
