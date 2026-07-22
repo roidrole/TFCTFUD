@@ -4,7 +4,7 @@ Ever profiled worlgen only to realize that 50% of the time is taken by TFC's ore
 
 Ever profiled iterating the recipe registry to find that more than half the time is spent gathering's TFC capabilities?
 
-Oh, you didn't... Well, I did, and I then wondered "TFC, the fuck u doin?"
+Oh, you didn't... Well, I did, and I then wondered "TFC, what the fuck are you doing?"
 
 It doesn't do anything good. Continue reading for more details
 
