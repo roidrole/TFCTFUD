@@ -1,0 +1,13 @@
+{
+	"package": "roidrole.tfctfud.mixins.tfc",
+	"required": true,
+	"refmap": "mixins.tfctfud.refmap.json",
+	"target": "@env(DEFAULT)",
+	"minVersion": "0.8.5",
+	"compatibilityLevel": "JAVA_8",
+	"mixins": [
+		"CalendarTFCMixin"
+	],
+	"server": [],
+	"client": []
+}
