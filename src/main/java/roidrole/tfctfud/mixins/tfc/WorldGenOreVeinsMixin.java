@@ -62,7 +62,7 @@ public abstract class WorldGenOreVeinsMixin {
 
 		for (Vein vein : veins)
 		{
-			boolean generated = ((IVeinExpansion)vein).tfutils_generate(world, chunkBlockPos, random);
+			boolean generated = ((IVeinExpansion)vein).tfctfud_generate(world, chunkBlockPos, random);
 			// Chunk post-processing, if a vein generated
 			if (vein.getType() != null)
 			{

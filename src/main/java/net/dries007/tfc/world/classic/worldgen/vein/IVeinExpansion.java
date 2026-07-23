@@ -6,5 +6,5 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public interface IVeinExpansion {
-	boolean tfutils_generate(World world, BlockPos chunkBlockPos, Random random);
+	boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random);
 }

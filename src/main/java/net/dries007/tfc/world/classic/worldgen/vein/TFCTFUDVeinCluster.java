@@ -10,10 +10,10 @@ import roidrole.tfctfud.utils.MutablerBlockPos;
 
 import java.util.Random;
 
-public class TFUVeinCluster extends Vein implements IVeinExpansion {
-	private final TFUVeinCluster.Cluster[] spawnPoints;
+public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
+	private final TFCTFUDVeinCluster.Cluster[] spawnPoints;
 
-	public TFUVeinCluster(BlockPos pos, VeinType veinType, Ore.Grade grade, Random rand)
+	public TFCTFUDVeinCluster(BlockPos pos, VeinType veinType, Ore.Grade grade, Random rand)
 	{
 		super(pos, veinType, grade);
 
@@ -23,10 +23,10 @@ public class TFUVeinCluster extends Vein implements IVeinExpansion {
 		double maxClusterSize = 0.6 * maxWidth;
 
 		int clusterCount = 4 + rand.nextInt(5);
-		spawnPoints = new TFUVeinCluster.Cluster[clusterCount];
+		spawnPoints = new TFCTFUDVeinCluster.Cluster[clusterCount];
 
 		int radius = (int) Math.ceil(maxClusterSize * (0.6 + 0.4 * rand.nextDouble()));
-		spawnPoints[0] = new TFUVeinCluster.Cluster(pos, radius);
+		spawnPoints[0] = new TFCTFUDVeinCluster.Cluster(pos, radius);
 		for (int i = 1; i < clusterCount; i++)
 		{
 			final BlockPos clusterPos = pos.add(
@@ -35,13 +35,13 @@ public class TFUVeinCluster extends Vein implements IVeinExpansion {
 				maxWidth * 0.4 * rand.nextDouble()
 			);
 			radius = (int) Math.ceil(maxClusterSize * (0.4 + 0.6 * rand.nextDouble()));
-			spawnPoints[i] = new TFUVeinCluster.Cluster(clusterPos, radius);
+			spawnPoints[i] = new TFCTFUDVeinCluster.Cluster(clusterPos, radius);
 		}
 	}
 
 
 	@Override
-	public boolean tfutils_generate(World world, BlockPos chunkBlockPos, Random random) {
+	public boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random) {
 		MutablerBlockPos mutablerBlockPos = new MutablerBlockPos();
 		boolean generated = false;
 		final int minx = chunkBlockPos.getX() + 8;

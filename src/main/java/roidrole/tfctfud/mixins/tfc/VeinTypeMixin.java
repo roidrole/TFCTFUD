@@ -2,7 +2,7 @@ package roidrole.tfctfud.mixins.tfc;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.dries007.tfc.api.types.Ore;
-import net.dries007.tfc.world.classic.worldgen.vein.TFUVeinCluster;
+import net.dries007.tfc.world.classic.worldgen.vein.TFCTFUDVeinCluster;
 import net.dries007.tfc.world.classic.worldgen.vein.Vein;
 import net.dries007.tfc.world.classic.worldgen.vein.VeinType;
 import net.minecraft.util.math.BlockPos;
@@ -24,7 +24,7 @@ public abstract class VeinTypeMixin {
 		cancellable = true,
 		remap = false
 	)
-	private void tfutils_getTFU_cluster(
+	private void tfctfud_getTFU_cluster(
 		Random rand,
 		int chunkX,
 		int chunkZ,
@@ -32,6 +32,6 @@ public abstract class VeinTypeMixin {
 		@Local(name = "startPos") BlockPos startPos,
 		@Local(name = "grade")Ore.Grade grade
 	){
-		cir.setReturnValue(new TFUVeinCluster(startPos, (VeinType)(Object) this, grade, rand));
+		cir.setReturnValue(new TFCTFUDVeinCluster(startPos, (VeinType)(Object) this, grade, rand));
 	}
 }

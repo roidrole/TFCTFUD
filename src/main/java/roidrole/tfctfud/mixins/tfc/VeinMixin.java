@@ -53,7 +53,7 @@ public abstract class VeinMixin implements IVeinExpansion {
 	}
 
 	@Override
-	public boolean tfutils_generate(World world, BlockPos chunkBlockPos, Random random){
+	public boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random){
 		boolean generated = false;
 		for (int x = chunkBlockPos.getX() + 8; x < chunkBlockPos.getX() + 24; x++)
 		{
