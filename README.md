@@ -16,7 +16,7 @@ On any relatively large modpack, this is very slow.
 
 This mod fixed this by using a `Map<Item, Map<Predicate<ItemStack>, Supplier<ICapabilityProvider>>>`, then iterating the matches with the item linearly. This is not API-breaking (the public field is still the same and still contains the items)
 
-### Worldgen
+### Ore Generation
 TFC's ore generation is very slow and quite wasteful. Every vein has, on average, 6 nodes, and the chance for an ore block to generate is inversely proportional to the distance to the closest one. Every block is evaluated independantly, and every distance to every node is checked. This means a lot of distance checks.
 
 TFCTFUD replaces this algorithm with one that starts at the nodes and expand outwards. This way, it can reduce the distance checks by ≈ half. It can also precompute parts of the distance check and reuse them (Δx², notably), further reducing the performance hit. 
