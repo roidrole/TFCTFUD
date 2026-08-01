@@ -24,7 +24,7 @@ public abstract class VeinTypeMixin {
 		cancellable = true,
 		remap = false
 	)
-	private void tfctfud_getTFU_cluster(
+	private void tfctfud_getTFCTFUD_cluster(
 		Random rand,
 		int chunkX,
 		int chunkZ,
