@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import roidrole.tfctfud.utils.MutablerBlockPos;
 
 import java.util.Random;
 
@@ -55,6 +56,7 @@ public abstract class VeinMixin implements IVeinExpansion {
 	@Override
 	public boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random){
 		boolean generated = false;
+		MutablerBlockPos posAt = new MutablerBlockPos();
 		for (int x = chunkBlockPos.getX() + 8; x < chunkBlockPos.getX() + 24; x++)
 		{
 			for (int z = chunkBlockPos.getZ() + 8; z < chunkBlockPos.getZ() + 24; z++)
@@ -64,11 +66,11 @@ public abstract class VeinMixin implements IVeinExpansion {
 				{
 					for (int y = this.getLowestY(); y <= this.getHighestY(); y++)
 					{
-						final BlockPos posAt = new BlockPos(x, y, z);
+						posAt.setPos(x, y, z);
 						final IBlockState stateAt = world.getBlockState(posAt);
 
 						// Do checks specific to the individual block pos that is getting replaced
-						if (random.nextDouble() < this.getChanceToGenerate(posAt) && stateAt.getBlock() instanceof BlockRockVariant)
+						if (stateAt.getBlock() instanceof BlockRockVariant && random.nextDouble() < this.getChanceToGenerate(posAt))
 						{
 							final BlockRockVariant blockAt = (BlockRockVariant) stateAt.getBlock();
 							if (blockAt.getType() == Rock.Type.RAW && this.canSpawnIn(blockAt.getRock()))
