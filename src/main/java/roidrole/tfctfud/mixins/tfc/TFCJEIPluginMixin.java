@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import roidrole.tfctfud.TFCTFUD;
 import roidrole.tfctfud.TFCTFUDConfig;
 
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -32,13 +33,13 @@ public abstract class TFCJEIPluginMixin {
 		Function<KnappingRecipe, Stream<KnappingRecipeWrapper>> function,
 		@Local(argsOnly = true, name = "arg1") IModRegistry registry
 	){
-		Rock selectedRock = TFCRegistries.ROCKS.getValue(new ResourceLocation(TFCTFUDConfig.knappingShowOneRockType));
-		if(selectedRock == null){
+		//Embed the null check in an Optional so it's still effectively final for the lambda below
+		final Rock selectedRock = Optional.ofNullable(TFCRegistries.ROCKS.getValue(new ResourceLocation(TFCTFUDConfig.knappingShowOneRockType))).orElseGet(() -> {
+			//The supplier is allowed to print this as it's only ever called if the value is null.
 			TFCTFUD.LOGGER.error(new NullPointerException("Configured rock type "+TFCTFUDConfig.knappingShowOneRockType +" is invalid! Falling back to the first registered rock"));
-			return instance.map(
-				recipe -> new KnappingRecipeWrapper.Stone(recipe, registry.getJeiHelpers().getGuiHelper(), TFCRegistries.ROCKS.iterator().next())
-			);
-		}
+			return TFCRegistries.ROCKS.iterator().next();
+		});
+
 		//Originally did a flatMap on the rock registry. Let us not
 		return instance.map(
 			recipe -> new KnappingRecipeWrapper.Stone(recipe, registry.getJeiHelpers().getGuiHelper(), selectedRock)
