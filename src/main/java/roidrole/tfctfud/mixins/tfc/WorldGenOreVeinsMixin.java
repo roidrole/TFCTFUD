@@ -1,5 +1,6 @@
 package roidrole.tfctfud.mixins.tfc;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.dries007.tfc.ConfigTFC;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.world.classic.ChunkGenTFC;
@@ -7,42 +8,36 @@ import net.dries007.tfc.world.classic.chunkdata.ChunkDataTFC;
 import net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins;
 import net.dries007.tfc.world.classic.worldgen.vein.IVeinExpansion;
 import net.dries007.tfc.world.classic.worldgen.vein.Vein;
-import net.dries007.tfc.world.classic.worldgen.vein.VeinRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 import static net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins.CHUNK_RADIUS;
 import static net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins.getNearbyVeins;
 
 @Mixin(WorldGenOreVeins.class)
 public abstract class WorldGenOreVeinsMixin {
-	@Shadow(remap = false)
-	@Final
-	private static Random LOCAL_RANDOM;
-
-	/**
-	 * @author roidrole
-	 * @reason Avoid list creation
-	 */
-	@Overwrite(remap = false)
-	// Gets veins at a single chunk. Deterministic for a specific chunk x/z and world seed
-	private static void getVeinsAtChunk(List<Vein> listToAdd, int chunkX, int chunkZ, long worldSeed)
-	{
-		LOCAL_RANDOM.setSeed(worldSeed + chunkX * 341873128712L + chunkZ * 132897987541L);
-		VeinRegistry.INSTANCE.getVeins().values().stream()
-			.filter(veinType -> LOCAL_RANDOM.nextInt(veinType.getRarity()) == 0)
-			.map(veinType -> veinType.createVein(LOCAL_RANDOM, chunkX, chunkZ))
-			.forEach(listToAdd::add)
-		;
+	//To avoid creating an intermediary list
+	@Redirect(
+		method = "getVeinsAtChunk",
+		at = @At(
+			value = "INVOKE",
+			target = "Ljava/util/stream/Stream;collect(Ljava/util/stream/Collector;)Ljava/lang/Object;"
+		)
+	)
+	private static Object directInsertion(Stream<Vein> instance, Collector<Vein, ?, List<Vein>> arCollector, @Local(ordinal = 0, argsOnly = true) List<Vein> listToAdd){
+		instance.forEach(listToAdd::add);
+		return listToAdd;
 	}
 
 	/**
