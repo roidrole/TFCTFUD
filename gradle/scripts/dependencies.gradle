@@ -40,7 +40,6 @@ dependencies {
 
     implementation('com.cleanroommc:configanytime:3.0')
     implementation(rfg.deobf('curse.maven:terrafirmacraft-302973:3645502'))
-    implementation('mezz:jei:4.29.8')
 
 
     // Example - Dependency descriptor:
