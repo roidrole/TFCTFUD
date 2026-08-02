@@ -1,6 +1,6 @@
 # TFC, THE FUCK U DOIN?
 
-Ever profiled worlgen only to realize that 50% of the time is taken by TFC's ore generation and, out of all things, LEAF DECAY?
+Ever profiled worldgen only to realize that 50% of the time is taken by TFC's ore generation and, out of all things, LEAF DECAY?
 
 Ever profiled iterating the recipe registry to find that more than half the time is spent gathering's TFC capabilities?
 
