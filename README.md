@@ -6,7 +6,7 @@ Ever profiled iterating the recipe registry to find that more than half the time
 
 Oh, you didn't... Well, I did, and I then wondered "TFC, what the fuck are you doing?"
 
-It doesn't do anything good. Continue reading for more details
+It doesn't do anything good.
 
 ### Capabilities
 TFC's capability use a `Map<Predicate<ItemStack>, Supplier<ICapabilityProvider>>` that is linearly iterated on capability gathering.
