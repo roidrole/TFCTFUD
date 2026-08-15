@@ -35,7 +35,7 @@ dependencies {
     runtimeOnly 'com.cleanroommc:osxnarratorblocker:1.0'
 
     //Nice to play with, and useful for debugging
-    runtimeOnly 'mezz:jei:4.29.7'
+    implementation 'mezz:jei:4.29.7'
     runtimeOnly 'curse.maven:nbt-tooltip-274816:2567902'
 
     implementation('com.cleanroommc:configanytime:3.0')

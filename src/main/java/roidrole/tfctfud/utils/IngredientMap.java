@@ -161,6 +161,9 @@ public class IngredientMap<V> implements Map<IIngredient<ItemStack>, V> {
 
 		public V remove(IIngredient<ItemStack> key){
 			int index = keys.indexOf(key);
+			if(index == -1){
+				return null;
+			}
 			keys.remove(index);
 			return values.remove(index);
 		}
