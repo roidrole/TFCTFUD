@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collector;
@@ -27,17 +28,18 @@ import static net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins.getNearby
 
 @Mixin(WorldGenOreVeins.class)
 public abstract class WorldGenOreVeinsMixin {
-	//To avoid creating an intermediary list
+	//Micro-optimization to avoid creating an intermediary list
 	@Redirect(
 		method = "getVeinsAtChunk",
 		at = @At(
 			value = "INVOKE",
 			target = "Ljava/util/stream/Stream;collect(Ljava/util/stream/Collector;)Ljava/lang/Object;"
-		)
+		),
+		remap = false
 	)
 	private static Object directInsertion(Stream<Vein> instance, Collector<Vein, ?, List<Vein>> arCollector, @Local(ordinal = 0, argsOnly = true) List<Vein> listToAdd){
 		instance.forEach(listToAdd::add);
-		return listToAdd;
+		return Collections.emptyList();
 	}
 
 	/**
