@@ -1,10 +1,7 @@
 package roidrole.tfctfud.mixins.tfc;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.dries007.tfc.ConfigTFC;
-import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.world.classic.ChunkGenTFC;
-import net.dries007.tfc.world.classic.chunkdata.ChunkDataTFC;
+import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins;
 import net.dries007.tfc.world.classic.worldgen.vein.IVeinExpansion;
 import net.dries007.tfc.world.classic.worldgen.vein.Vein;
@@ -13,9 +10,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,10 +19,7 @@ import java.util.Random;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins.CHUNK_RADIUS;
-import static net.dries007.tfc.world.classic.worldgen.WorldGenOreVeins.getNearbyVeins;
-
-@Mixin(WorldGenOreVeins.class)
+@Mixin(value = WorldGenOreVeins.class, remap = false)
 public abstract class WorldGenOreVeinsMixin {
 	//Micro-optimization to avoid creating an intermediary list
 	@Redirect(
@@ -34,47 +27,42 @@ public abstract class WorldGenOreVeinsMixin {
 		at = @At(
 			value = "INVOKE",
 			target = "Ljava/util/stream/Stream;collect(Ljava/util/stream/Collector;)Ljava/lang/Object;"
-		),
-		remap = false
+		)
 	)
-	private static Object directInsertion(Stream<Vein> instance, Collector<Vein, ?, List<Vein>> arCollector, @Local(ordinal = 0, argsOnly = true) List<Vein> listToAdd){
+	private static Object tfctfud_directInsertion(Stream<Vein> instance, Collector<Vein, ?, List<Vein>> arCollector, @Local(ordinal = 0, argsOnly = true) List<Vein> listToAdd){
 		instance.forEach(listToAdd::add);
 		return Collections.emptyList();
 	}
+	//We want to delegate generation of the vein in a chunk to the vein itself. We proceed in two steps
 
-	/**
-	 * @author roidrole
-	 * @reason move that to Vein class
-	 */
-	@Overwrite(remap = false)
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider){
+	//1. We kill the geneation loop
+	@ModifyConstant(
+		method = "generate",
+		constant = @Constant(intValue = 24)
+	)
+	private static int tfctfud_noLooping(int constant){
+		return 8;
+	}
 
-		if (!(chunkGenerator instanceof ChunkGenTFC)) return;
-		final BlockPos chunkBlockPos = new BlockPos(chunkX << 4, 0, chunkZ << 4);
-		ChunkDataTFC chunkData = ChunkDataTFC.get(world, chunkBlockPos);
-		if (!chunkData.isInitialized()) return;
-		if (world.provider.getDimension() != 0) return;
-
-		List<Vein> veins = getNearbyVeins(chunkX, chunkZ, world.getSeed(), CHUNK_RADIUS);
-
-		for (Vein vein : veins)
-		{
-			boolean generated = ((IVeinExpansion)vein).tfctfud_generate(world, chunkBlockPos, random);
-			// Chunk post-processing, if a vein generated
-			if (vein.getType() != null)
-			{
-				if (generated)
-				{
-					chunkData.markVeinGenerated(vein);
-				}
-				else if (ConfigTFC.General.DEBUG.enable)
-				{
-					// Failed to generate, debug info
-					// This can be by a number of factors, mainly because at each expected replacing position we didn't find a matching raw rock.
-					// Some possible causes: Width / Height / Shape / Density / Y / Rock Layer
-					TerraFirmaCraft.getLog().debug("Failed to generate vein '{}' in chunk ({}, {}). Vein center pos ({}x, {}y, {}z)", vein.getType().getRegistryName(), chunkX, chunkZ, vein.getPos().getX(), vein.getPos().getY(), vein.getPos().getZ());
-				}
-			}
-		}
+	//2. We inject vein.tfctfud_generate
+	@Inject(
+		method = "generate",
+		at = @At(
+			value = "INVOKE",
+			target = "Lnet/dries007/tfc/world/classic/worldgen/vein/Vein;getType()Lnet/dries007/tfc/world/classic/worldgen/vein/VeinType;",
+			ordinal = 0
+		)
+	)
+	private static void tfctfud_generate(
+		Random random,
+		int chunkX, int chunkZ, World world,
+		IChunkGenerator chunkGenerator,
+		IChunkProvider chunkProvider,
+		CallbackInfo ci,
+		@Local(name = "vein") Vein vein,
+		@Local(name = "generated") LocalBooleanRef generated,
+		@Local(name = "chunkBlockPos") BlockPos chunkBlockPos
+	){
+		generated.set(((IVeinExpansion)vein).tfctfud_generate(world, chunkBlockPos, random));
 	}
 }
