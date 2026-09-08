@@ -23,12 +23,9 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 	public Tree wood;
 
 	//Queues of blockpos to visit, split and static to avoid excessive allocation
-	@Unique private static IntList tfctfud_queueX1 = new IntArrayList();
-	@Unique private static IntList tfctfud_queueY1 = new IntArrayList();
-	@Unique private static IntList tfctfud_queueZ1 = new IntArrayList();
-	@Unique private static IntList tfctfud_queueX2 = new IntArrayList();
-	@Unique private static IntList tfctfud_queueY2 = new IntArrayList();
-	@Unique private static IntList tfctfud_queueZ2 = new IntArrayList();
+	//Format: [x, y, z, x, y, z, ...]
+	@Unique private static IntList tfctfud_queue1 = new IntArrayList();
+	@Unique private static IntList tfctfud_queue2 = new IntArrayList();
 
 	@Unique
 	private static final MutablerBlockPos tfctfud_decayPos = new MutablerBlockPos();
@@ -55,21 +52,17 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 
 		final BlockLogTFC log = BlockLogTFC.get(wood);
 
-		tfctfud_queueX1.clear();
-		tfctfud_queueY1.clear();
-		tfctfud_queueZ1.clear();
-		tfctfud_queueX2.clear();
-		tfctfud_queueY2.clear();
-		tfctfud_queueZ2.clear();
+		tfctfud_queue1.clear();
+		tfctfud_queue2.clear();
 
-		tfctfud_queueX1.add(posIn.getX());
-		tfctfud_queueY1.add(posIn.getY());
-		tfctfud_queueZ1.add(posIn.getZ());
+		tfctfud_queue1.add(posIn.getX());
+		tfctfud_queue1.add(posIn.getY());
+		tfctfud_queue1.add(posIn.getZ());
 		for (int i = 1; i < radius; i++) {
-			for (int j = 0; j < tfctfud_queueX1.size(); j++) {
-				final int xOrigin = tfctfud_queueX1.getInt(j);
-				final int yOrigin = tfctfud_queueY1.getInt(j);
-				final int zOrigin = tfctfud_queueZ1.getInt(j);
+			for (int j = 0; j < tfctfud_queue1.size();) {
+				final int xOrigin = tfctfud_queue1.getInt(j++);
+				final int yOrigin = tfctfud_queue1.getInt(j++);
+				final int zOrigin = tfctfud_queue1.getInt(j++);
 
 				for(EnumFacing facing : EnumFacing.VALUES){
 					final int x = xOrigin + facing.getXOffset();
@@ -88,26 +81,21 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 						return;
 					}
 					if (stateCheck.getBlock() == this) {
-						tfctfud_queueX2.add(x);
-						tfctfud_queueY2.add(y);
-						tfctfud_queueZ2.add(z);
+						tfctfud_queue2.add(x);
+						tfctfud_queue2.add(y);
+						tfctfud_queue2.add(z);
 					}
 					evaluated[relPos] = true;
 				}
 			}
-			tfctfud_queueX1.clear();
-			tfctfud_queueY1.clear();
-			tfctfud_queueZ1.clear();
-			//Swap queue 1 and 2. Since all 1 queue are equal (but must remain distinct), we can make this easier
-			final IntList tempQueue = tfctfud_queueZ1;
-			tfctfud_queueZ1 = tfctfud_queueZ2;
-			tfctfud_queueZ2 = tfctfud_queueY1;
-			tfctfud_queueY1 = tfctfud_queueY2;
-			tfctfud_queueY2 = tfctfud_queueX1;
-			tfctfud_queueX1 = tfctfud_queueX2;
-			tfctfud_queueX2 = tempQueue;
+			tfctfud_queue1.clear();
+
+			final IntList tempQueue = tfctfud_queue1;
+			tfctfud_queue1 = tfctfud_queue2;
+			tfctfud_queue2 = tempQueue;
 		}
 
+		//If the loop didn't return, it means that no log block was found
 		world.setBlockToAir(posIn);
 		final int particleScale = 10;
 		final double x = posIn.getX();
