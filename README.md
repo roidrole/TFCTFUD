@@ -30,3 +30,4 @@ TFCTFUD optimized this by replacing the `HashSet` with a simple `boolean[]` and 
 - Option to remove calendar logging as it is quite spammy and not useful
 - Option to use a translationkey instead of hardcoded strings for the item size
 - Option to have TFC's JEI plugin knapping only show one stone type, cutting down on clutter
+- Configurable rotting overlay blacklist as it is undesirable for some immediately-rotting and/or modded items

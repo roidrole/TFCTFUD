@@ -27,6 +27,13 @@ public class TFCTFUDConfig {
 	@Config.Comment("If not empty, the jei category for knapping will only show the provided stone type. Format : \"tfc:andesite\"")
 	public static String knappingShowOneRockType = "";
 
+	@Config.Comment({
+		"By default, TFC will show a green overlay over any item that can rot, including immediately-rotten ones",
+		"This can be undesirable for some items, especially modded or immediately-rotting ones.",
+		"Any item id in this list (format 'minecraft:rotten_flesh') will not have that overlay"
+	})
+	public static String[] rottingOverlayBlacklist = { };
+
 	static {
 		ConfigAnytime.register(TFCTFUDConfig.class);
 	}

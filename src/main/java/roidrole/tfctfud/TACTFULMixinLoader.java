@@ -8,7 +8,7 @@ import java.util.List;
 public class TACTFULMixinLoader implements ILateMixinLoader {
 	@Override
 	public List<String> getMixinConfigs() {
-		ArrayList<String> mixinConfigs = new ArrayList<>(3);
+		ArrayList<String> mixinConfigs = new ArrayList<>(4);
 		if(TFCTFUDConfig.calendarShutUp){
 			mixinConfigs.add("mixins."+Tags.MOD_ID+".calendar_shut_up.json");
 		}
@@ -26,6 +26,9 @@ public class TACTFULMixinLoader implements ILateMixinLoader {
 		}
 		if(TFCTFUDConfig.optimizeLeafDecay){
 			mixinConfigs.add("mixins."+Tags.MOD_ID+".optimize_leaf_decay.json");
+		}
+		if(TFCTFUDConfig.rottingOverlayBlacklist.length != 0){
+			mixinConfigs.add("mixins."+Tags.MOD_ID+".rotting_overlay_blacklist.json");
 		}
 		return mixinConfigs;
 	}
