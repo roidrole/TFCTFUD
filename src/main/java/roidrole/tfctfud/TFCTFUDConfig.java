@@ -14,6 +14,9 @@ public class TFCTFUDConfig {
 	@Config.Comment("Replaces the algorithm to place ores in cluster with a more performant one. Pretty invasive mixin.")
 	public static boolean optimizeOreGen = true;
 
+	@Config.Comment("Prevents TFC from placing empty loose rocks if enableLooseRocks is false in TFC's config.")
+	public static boolean dontPlaceEmptyTiles = true;
+
 	@Config.Comment("Makes the calendar shut up about errors. This does not fix the errors, only silences them.")
 	public static boolean calendarShutUp = false;
 

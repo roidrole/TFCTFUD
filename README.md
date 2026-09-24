@@ -26,6 +26,11 @@ TFC's leaf decay algorithm uses a breath-first search with a `HashSet<BlockPos>`
 
 TFCTFUD optimized this by replacing the `HashSet` with a simple `boolean[]` and computing the index based on the relative coordinate. It is easier in RAM, object allocation and CPU time.
 
+### Loose rocks generation
+TFC's loose rock generation places a placed item TileEntity before checking if there's actually an item to be placed there. If loose rocks are disabled, it will therefore spawn a TileEntity with an empty item.
+
+TFCTFUD makes it choose the item *before* placing the TileEntity, and skip the placement if no item is selected, thus making it not place empty placed item.
+
 ### Misc
 - Option to remove calendar logging as it is quite spammy and not useful
 - Option to use a translationkey instead of hardcoded strings for the item size

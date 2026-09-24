@@ -30,6 +30,9 @@ public class TACTFULMixinLoader implements ILateMixinLoader {
 		if(TFCTFUDConfig.rottingOverlayBlacklist.length != 0){
 			mixinConfigs.add("mixins."+Tags.MOD_ID+".rotting_overlay_blacklist.json");
 		}
+		if(TFCTFUDConfig.dontPlaceEmptyTiles){
+			mixinConfigs.add("mixins."+Tags.MOD_ID+".worldgen_loose_disable.json");
+		}
 		return mixinConfigs;
 	}
 }
