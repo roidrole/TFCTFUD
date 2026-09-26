@@ -24,8 +24,8 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 
 	//Queues of blockpos to visit, split and static to avoid excessive allocation
 	//Format: [x, y, z, x, y, z, ...]
-	@Unique private static IntList tfctfud_queue1 = new IntArrayList();
-	@Unique private static IntList tfctfud_queue2 = new IntArrayList();
+	@Unique
+	private static final IntList tfctfud_queue = new IntArrayList();
 
 	@Unique
 	private static final MutablerBlockPos tfctfud_decayPos = new MutablerBlockPos();
@@ -51,18 +51,21 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 		int minZ = posIn.getZ() - radius;
 
 		final BlockLogTFC log = BlockLogTFC.get(wood);
+		tfctfud_queue.clear();
 
-		tfctfud_queue1.clear();
-		tfctfud_queue2.clear();
-
-		tfctfud_queue1.add(posIn.getX());
-		tfctfud_queue1.add(posIn.getY());
-		tfctfud_queue1.add(posIn.getZ());
+		tfctfud_queue.add(posIn.getX());
+		tfctfud_queue.add(posIn.getY());
+		tfctfud_queue.add(posIn.getZ());
+		int j = 0;
 		for (int i = 1; i < radius; i++) {
-			for (int j = 0; j < tfctfud_queue1.size();) {
-				final int xOrigin = tfctfud_queue1.getInt(j++);
-				final int yOrigin = tfctfud_queue1.getInt(j++);
-				final int zOrigin = tfctfud_queue1.getInt(j++);
+			//Final index for this iteration.
+			//We allow the list to grow relatively unbounded across iterations.
+			//Since the list is static and every iteration grows O(n^2), this shouldn't waste too much RAM
+			final int maxJ = tfctfud_queue.size();
+			while (j < maxJ) {
+				final int xOrigin = tfctfud_queue.getInt(j++);
+				final int yOrigin = tfctfud_queue.getInt(j++);
+				final int zOrigin = tfctfud_queue.getInt(j++);
 
 				for(EnumFacing facing : EnumFacing.VALUES){
 					final int x = xOrigin + facing.getXOffset();
@@ -81,18 +84,13 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 						return;
 					}
 					if (stateCheck.getBlock() == this) {
-						tfctfud_queue2.add(x);
-						tfctfud_queue2.add(y);
-						tfctfud_queue2.add(z);
+						tfctfud_queue.add(x);
+						tfctfud_queue.add(y);
+						tfctfud_queue.add(z);
 					}
 					evaluated[relPos] = true;
 				}
 			}
-			tfctfud_queue1.clear();
-
-			final IntList tempQueue = tfctfud_queue1;
-			tfctfud_queue1 = tfctfud_queue2;
-			tfctfud_queue2 = tempQueue;
 		}
 
 		//If the loop didn't return, it means that no log block was found
