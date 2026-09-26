@@ -14,6 +14,9 @@ public class TFCTFUDConfig {
 	@Config.Comment("Replaces the algorithm to place ores in cluster with a more performant one. Pretty invasive mixin.")
 	public static boolean optimizeOreGen = true;
 
+	@Config.Comment("TFC creates a new entity every time to check its spawning chance, taking ≈ 6% of total worldgen time in larger packs")
+	public static boolean optimizeAnimalGen = true;
+
 	@Config.Comment("Prevents TFC from placing empty loose rocks if enableLooseRocks is false in TFC's config.")
 	public static boolean dontPlaceEmptyTiles = true;
 

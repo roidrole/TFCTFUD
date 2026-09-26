@@ -21,15 +21,20 @@ TFC's ore generation is very slow and quite wasteful. Every vein has, on average
 
 TFCTFUD replaces this algorithm with one that starts at the nodes and expand outwards. This way, it can reduce the distance checks by ≈ half. It can also precompute parts of the distance check and reuse them (Δx², notably), further reducing the performance hit. 
 
-### Leaf decay
-TFC's leaf decay algorithm uses a breath-first search with a `HashSet<BlockPos>` as a cache to remember which nodes have been visited. This means that there is a lot of object allocations (as each BlockPos must be unique) and the BlockPos must be hashed on every access. 
-
-TFCTFUD optimized this by replacing the `HashSet` with a simple `boolean[]` and computing the index based on the relative coordinate. It is easier in RAM, object allocation and CPU time.
-
 ### Loose rocks generation
 TFC's loose rock generation places a placed item TileEntity before checking if there's actually an item to be placed there. If loose rocks are disabled, it will therefore spawn a TileEntity with an empty item.
 
 TFCTFUD makes it choose the item *before* placing the TileEntity, and skip the placement if no item is selected, thus making it not place empty placed item.
+
+### Entity Worldgen
+TFC's entity worldgen (entities present at worldgen, typically animals on the ground) loops through all registered entities, creating a new instance of each for each chunk. That instance only serves to get the chance for this entity to generate for this chunk. This process can take ≈ 5% of worldgen time in some packs.
+
+TFCTFUD makes TFC reuse the entity instances from chunk to chunk, bypassing the expensive entity creation entirely.
+
+### Leaf decay
+TFC's leaf decay algorithm uses a breath-first search with a `HashSet<BlockPos>` as a cache to remember which nodes have been visited. This means that there is a lot of object allocations (as each BlockPos must be unique) and the BlockPos must be hashed on every access. 
+
+TFCTFUD optimized this by replacing the `HashSet` with a simple `boolean[]` and computing the index based on the relative coordinate. It is easier in RAM, object allocation and CPU time.
 
 ### Misc
 - Option to remove calendar logging as it is quite spammy and not useful

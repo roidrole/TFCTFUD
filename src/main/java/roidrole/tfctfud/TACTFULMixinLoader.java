@@ -33,6 +33,9 @@ public class TACTFULMixinLoader implements ILateMixinLoader {
 		if(TFCTFUDConfig.dontPlaceEmptyTiles){
 			mixinConfigs.add("mixins."+Tags.MOD_ID+".worldgen_loose_disable.json");
 		}
+		if(TFCTFUDConfig.optimizeAnimalGen){
+			mixinConfigs.add("mixins."+Tags.MOD_ID+".worldgen_animals.json");
+		}
 		return mixinConfigs;
 	}
 }
