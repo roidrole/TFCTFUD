@@ -66,7 +66,7 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 					for (int dz = mindz; dz < maxdz; dz++) {
 						double distance = cluster.radiusInvSq * (dx2 + dy2 + dz * dz);
 						double chance = type.getDensity() * Math.min(5*(1 - distance), distance);
-						if(random.nextDouble() < chance){
+						if(random.nextFloat() < chance){
 							mutablerBlockPos.translate(dx, dy, dz);
 							if(attemptGeneration(world, mutablerBlockPos)){
 								generated = true;
