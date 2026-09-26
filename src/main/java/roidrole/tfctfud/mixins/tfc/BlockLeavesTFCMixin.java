@@ -46,9 +46,9 @@ public abstract class BlockLeavesTFCMixin extends BlockLeaves {
 
 		//The evaluated cache. Allocated every call. The JVM will happily optimize this
 		final boolean[] evaluated = new boolean[sideSizeSq * sideSize];
-		int minX = posIn.getX() - radius;
-		int minY = posIn.getY() - radius;
-		int minZ = posIn.getZ() - radius;
+		final int minX = posIn.getX() - radius;
+		final int minY = posIn.getY() - radius;
+		final int minZ = posIn.getZ() - radius;
 
 		final BlockLogTFC log = BlockLogTFC.get(wood);
 		tfctfud_queue.clear();

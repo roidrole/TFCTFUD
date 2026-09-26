@@ -124,24 +124,24 @@ public class IngredientMap<V> implements Map<IIngredient<ItemStack>, V> {
 		size = 0;
 	}
 
-	@Override
+	@Override @Nonnull
 	public Set<IIngredient<ItemStack>> keySet() {
 		return itemMap.values().stream().map(Node::getKeys).flatMap(Collection::stream).collect(Collectors.toSet());
 	}
 
-	@Override
+	@Override @Nonnull
 	public Collection<V> values() {
 		return itemMap.values().stream().map(Node::getValues).flatMap(Collection::stream).collect(Collectors.toList());
 	}
 
-	@Override
+	@Override @Nonnull
 	public Set<Entry<IIngredient<ItemStack>, V>> entrySet() {
 		return itemMap.values().stream().map(Node::entrySet).flatMap(Collection::stream).collect(Collectors.toSet());
 	}
 
 	private static class Node<V> {
-		List<IIngredient<ItemStack>> keys = new ArrayList<>(1);
-		List<V> values = new ArrayList<>(1);
+		final List<IIngredient<ItemStack>> keys = new ArrayList<>(1);
+		final List<V> values = new ArrayList<>(1);
 
 		public boolean containsKey(Object key){
 			return keys.contains(key);
@@ -181,7 +181,7 @@ public class IngredientMap<V> implements Map<IIngredient<ItemStack>, V> {
 
 		public Set<Entry<IIngredient<ItemStack>, V>> entrySet(){
 			return new AbstractSet<Entry<IIngredient<ItemStack>, V>>() {
-				@Override
+				@Override @Nonnull
 				public Iterator<Entry<IIngredient<ItemStack>, V>> iterator() {
 					return new Iterator<Entry<IIngredient<ItemStack>, V>>() {
 						int index = -1;

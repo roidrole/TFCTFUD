@@ -18,11 +18,11 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 		super(pos, veinType, grade);
 
 		// Individual vein width is 60% - 100% of type width (it must fit exactly inside the circle described by width)
-		double maxWidth = (0.6 + rand.nextDouble() * 0.4) * veinType.getWidth();
-		double maxHeight = (0.6 + rand.nextDouble() * 0.4) * veinType.getHeight();
-		double maxClusterSize = 0.6 * maxWidth;
+		final double maxWidth = (0.6 + rand.nextDouble() * 0.4) * veinType.getWidth();
+		final double maxHeight = (0.6 + rand.nextDouble() * 0.4) * veinType.getHeight();
+		final double maxClusterSize = 0.6 * maxWidth;
 
-		int clusterCount = 4 + rand.nextInt(5);
+		final int clusterCount = 4 + rand.nextInt(5);
 		spawnPoints = new TFCTFUDVeinCluster.Cluster[clusterCount];
 
 		int radius = (int) Math.ceil(maxClusterSize * (0.6 + 0.4 * rand.nextDouble()));
@@ -42,7 +42,7 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 
 	@Override
 	public boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random) {
-		MutablerBlockPos mutablerBlockPos = new MutablerBlockPos();
+		final MutablerBlockPos mutablerBlockPos = new MutablerBlockPos();
 		boolean generated = false;
 		final int minx = chunkBlockPos.getX() + 8;
 		final int maxx = minx + 16;
@@ -52,20 +52,21 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 		final int maxz = minz + 16;
 
 		for (Cluster cluster: spawnPoints){
-			int mindx = Math.max(-cluster.radius, minx - cluster.x);
-			int mindy = Math.max(-cluster.radius, miny - cluster.y);
-			int mindz = Math.max(-cluster.radius, minz - cluster.z);
-			int maxdx = Math.min(cluster.radius, maxx - cluster.x);
-			int maxdy = Math.min(cluster.radius, maxy - cluster.y);
-			int maxdz = Math.min(cluster.radius, maxz - cluster.z);
+			final int mindx = Math.max(-cluster.radius, minx - cluster.x);
+			final int mindy = Math.max(-cluster.radius, miny - cluster.y);
+			final int mindz = Math.max(-cluster.radius, minz - cluster.z);
+			final int maxdx = Math.min(cluster.radius, maxx - cluster.x);
+			final int maxdy = Math.min(cluster.radius, maxy - cluster.y);
+			final int maxdz = Math.min(cluster.radius, maxz - cluster.z);
 			mutablerBlockPos.setPos(cluster.x, cluster.y, cluster.z);
 			for (int dx = mindx; dx < maxdx; dx++) {
-				int dx2 = dx * dx;
+				final int dx2 = dx * dx;
 				for (int dy = mindy; dy < maxdy; dy++) {
-					int dy2 = dy * dy;
+					final int dy2 = dy * dy;
 					for (int dz = mindz; dz < maxdz; dz++) {
-						double distance = cluster.radiusInvSq * (dx2 + dy2 + dz * dz);
-						double chance = type.getDensity() * Math.min(5*(1 - distance), distance);
+						final int dz2 = dz * dz;
+						final double distance = cluster.radiusInvSq * (dx2 + dy2 + dz2);
+						final double chance = type.getDensity() * Math.min(5*(1 - distance), distance);
 						if(random.nextFloat() < chance){
 							mutablerBlockPos.translate(dx, dy, dz);
 							if(attemptGeneration(world, mutablerBlockPos)){
