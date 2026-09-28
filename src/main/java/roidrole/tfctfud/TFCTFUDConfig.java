@@ -11,6 +11,9 @@ public class TFCTFUDConfig {
 	@Config.Comment("Optimizes TFC's capability gathering algorithm with a more efficient one.")
 	public static boolean optimizeCapabilities = true;
 
+	@Config.Comment("Optimizes TFC's falling block manager to use a better data structure.")
+	public static boolean optimizeFallingBlocks = true;
+
 	@Config.Comment("Replaces the algorithm to place ores in cluster with a more performant one. Pretty invasive mixin.")
 	public static boolean optimizeOreGen = true;
 

@@ -36,6 +36,11 @@ TFC's leaf decay algorithm uses a breath-first search with a `HashSet<BlockPos>`
 
 TFCTFUD optimized this by replacing the `HashSet` with a simple `boolean[]` and computing the index based on the relative coordinate. It is easier in RAM, object allocation and CPU time.
 
+### Falling Block
+TFC's falling block manager contains a `HashMap<IBlockState, Specification>` to associate the blockstates to their specifications. Every single block update, it checks in this HashMap the specification for the block triggering the block update and all of its neighbours. Every single lookup requires iterating though all properties the IBlockState has registered and hashing them. Considering block updates are very frequent, the cost of this adds up fast. 
+
+TFCTFUD replaces this map with a `HashMap<Block, Map<IBlockState, Specification>>`, where the internal map is iterated linearly (and it really just two lists). There is also a fast path for blocks whose blockstates are all registered, skipping the internal map entirely. The cost of looking up a `Block` key is negligible.
+
 ### Misc
 - Option to remove calendar logging as it is quite spammy and not useful
 - Option to use a translationkey instead of hardcoded strings for the item size

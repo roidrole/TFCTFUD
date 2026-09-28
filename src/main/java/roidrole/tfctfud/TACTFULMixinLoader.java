@@ -3,6 +3,7 @@ package roidrole.tfctfud;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TACTFULMixinLoader implements ILateMixinLoader {
@@ -10,32 +11,38 @@ public class TACTFULMixinLoader implements ILateMixinLoader {
 	public List<String> getMixinConfigs() {
 		ArrayList<String> mixinConfigs = new ArrayList<>(4);
 		if(TFCTFUDConfig.calendarShutUp){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".calendar_shut_up.json");
+			addMixinConf(mixinConfigs, "calendar_shut_up");
 		}
 		if(TFCTFUDConfig.itemSizeLocalization){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".itemsize_localization.json");
+			addMixinConf(mixinConfigs, "itemsize_localization");
 		}
 		if(!TFCTFUDConfig.knappingShowOneRockType.isEmpty()){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".knapping_show_one_stone.json");
+			addMixinConf(mixinConfigs, "knapping_show_one_stone");
 		}
 		if(TFCTFUDConfig.optimizeCapabilities){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".optimize_capability.json");
+			addMixinConf(mixinConfigs, "optimize_capability");
 		}
 		if(TFCTFUDConfig.optimizeOreGen){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".optimize_ore_gen.json");
+			addMixinConf(mixinConfigs, "optimize_ore_gen");
 		}
 		if(TFCTFUDConfig.optimizeLeafDecay){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".optimize_leaf_decay.json");
+			addMixinConf(mixinConfigs, "optimize_leaf_decay");
 		}
 		if(TFCTFUDConfig.rottingOverlayBlacklist.length != 0){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".rotting_overlay_blacklist.json");
+			addMixinConf(mixinConfigs, "rotting_overlay_blacklist");
 		}
 		if(TFCTFUDConfig.dontPlaceEmptyTiles){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".worldgen_loose_disable.json");
+			addMixinConf(mixinConfigs, "worldgen_loose_disable");
 		}
 		if(TFCTFUDConfig.optimizeAnimalGen){
-			mixinConfigs.add("mixins."+Tags.MOD_ID+".worldgen_animals.json");
+			addMixinConf(mixinConfigs, "worldgen_animals");
+		}
+		if(TFCTFUDConfig.optimizeFallingBlocks){
+			addMixinConf(mixinConfigs, "optimize_falling_blocks");
 		}
 		return mixinConfigs;
+	}
+	private static void addMixinConf(final Collection<String> mixinConfigs, final String mixin){
+		mixinConfigs.add("mixins." + Tags.MOD_ID + '.' + mixin + ".json");
 	}
 }
