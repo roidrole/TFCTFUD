@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class TACTFULMixinLoader implements ILateMixinLoader {
+public class TFCTFUDMixinLoader implements ILateMixinLoader {
 	@Override
 	public List<String> getMixinConfigs() {
 		ArrayList<String> mixinConfigs = new ArrayList<>(4);
@@ -39,6 +39,9 @@ public class TACTFULMixinLoader implements ILateMixinLoader {
 		}
 		if(TFCTFUDConfig.optimizeFallingBlocks){
 			addMixinConf(mixinConfigs, "optimize_falling_blocks");
+		}
+		if(TFCTFUDConfig.optimizeChunkGenGaussian){
+			addMixinConf(mixinConfigs, "optimize_worldgen_gaussian");
 		}
 		return mixinConfigs;
 	}

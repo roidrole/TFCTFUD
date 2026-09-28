@@ -41,6 +41,13 @@ TFC's falling block manager contains a `HashMap<IBlockState, Specification>` to 
 
 TFCTFUD replaces this map with a `HashMap<Block, Map<IBlockState, Specification>>`, where the internal map is iterated linearly (and it really just two lists). There is also a fast path for blocks whose blockstates are all registered, skipping the internal map entirely. The cost of looking up a `Block` key is negligible.
 
+### Chunk Generation
+TFC's chunk generation has approximately 7000 calls of the form `random.nextGaussian() < threshold` per chunk. `random.nextGaussian()` is relatively slow, and this call alone can take 1/8 of worldgen time. 
+
+TFCTFUD replaces these calls by precomputing the probability of this call being true once per chunk, then using calls of the form `random.nextFloat() < probability`. In the best case (for Gaussian), `random.nextFloat` is at least 4x faster. 
+
+#### `/!\` This optimization will drastically change the world generation as it changes the value of subsequent random calls. As such, it is disabled by default, but perfectly safe to enable for new worlds.
+
 ### Misc
 - Option to remove calendar logging as it is quite spammy and not useful
 - Option to use a translationkey instead of hardcoded strings for the item size

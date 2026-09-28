@@ -20,6 +20,12 @@ public class TFCTFUDConfig {
 	@Config.Comment("TFC creates a new entity every time to check its spawning chance, taking ≈ 6% of total worldgen time in larger packs")
 	public static boolean optimizeAnimalGen = true;
 
+	@Config.Comment({
+		"TFC's chunk generation calls random.nextGaussian ≈ 7000 per chunk. We can precompute the chance of success and replace it with random.nextFloat.",
+		"Disabled by default as this changes seeds, safe to enable for new worlds."
+	})
+	public static boolean optimizeChunkGenGaussian = false;
+
 	@Config.Comment("Prevents TFC from placing empty loose rocks if enableLooseRocks is false in TFC's config.")
 	public static boolean dontPlaceEmptyTiles = true;
 
@@ -37,7 +43,7 @@ public class TFCTFUDConfig {
 	public static String knappingShowOneRockType = "";
 
 	@Config.Comment({
-		"By default, TFC will show a green overlay over any item that can rot, including immediately-rotten ones",
+		"By default, TFC will show a green overlay over any item that can rot",
 		"This can be undesirable for some items, especially modded or immediately-rotting ones.",
 		"Any item id in this list (format 'minecraft:rotten_flesh') will not have that overlay"
 	})
