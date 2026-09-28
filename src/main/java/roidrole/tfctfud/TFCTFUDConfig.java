@@ -20,11 +20,8 @@ public class TFCTFUDConfig {
 	@Config.Comment("TFC creates a new entity every time to check its spawning chance, taking ≈ 6% of total worldgen time in larger packs")
 	public static boolean optimizeAnimalGen = true;
 
-	@Config.Comment({
-		"TFC's chunk generation calls random.nextGaussian ≈ 7000 per chunk. We can precompute the chance of success and replace it with random.nextFloat.",
-		"Disabled by default as this changes seeds, safe to enable for new worlds."
-	})
-	public static boolean optimizeChunkGenGaussian = false;
+	@Config.Comment("TFC's chunk generation calls random.nextGaussian ≈ 7000 times per chunk. We can precompute the chance of success and replace it with random.nextFloat.")
+	public static boolean optimizeChunkGenGaussian = true;
 
 	@Config.Comment("Prevents TFC from placing empty loose rocks if enableLooseRocks is false in TFC's config.")
 	public static boolean dontPlaceEmptyTiles = true;

@@ -46,9 +46,9 @@ public abstract class ChunkGenTFCMixin {
 		boolean passes = instance.nextFloat() < tfctfud_grassProb;
 		//Rainfall is between 0 and 500. We just need to provide a value that works with that
 		if(passes){
-			return -512.0D;
-		} else {
 			return 512.0D;
+		} else {
+			return -512.0D;
 		}
 	}
 	@Redirect(
@@ -63,9 +63,9 @@ public abstract class ChunkGenTFCMixin {
 		boolean passes = instance.nextFloat() < tfctfud_sandProb;
 		//Rainfall is between 0 and 500. We just need to provide a value that works with that
 		if(passes){
-			return -512.0D;
-		} else {
 			return 512.0D;
+		} else {
+			return -512.0D;
 		}
 	}
 }
