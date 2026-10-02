@@ -6,7 +6,7 @@ import net.dries007.tfc.objects.blocks.stone.BlockRockVariant;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import roidrole.tfctfud.utils.MutablerBlockPos;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.Random;
 
@@ -42,7 +42,6 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 
 	@Override
 	public boolean tfctfud_generate(World world, BlockPos chunkBlockPos, Random random) {
-		final MutablerBlockPos mutablerBlockPos = new MutablerBlockPos();
 		boolean generated = false;
 		final int minx = chunkBlockPos.getX() + 8;
 		final int maxx = minx + 16;
@@ -58,7 +57,6 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 			final int maxdx = Math.min(cluster.radius, maxx - cluster.x);
 			final int maxdy = Math.min(cluster.radius, maxy - cluster.y);
 			final int maxdz = Math.min(cluster.radius, maxz - cluster.z);
-			mutablerBlockPos.setPos(cluster.x, cluster.y, cluster.z);
 			for (int dx = mindx; dx < maxdx; dx++) {
 				final int dx2 = dx * dx;
 				for (int dy = mindy; dy < maxdy; dy++) {
@@ -68,11 +66,9 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 						final double distance = cluster.radiusInvSq * (dx2 + dy2 + dz2);
 						final double chance = type.getDensity() * Math.min(5*(1 - distance), distance);
 						if(random.nextFloat() < chance){
-							mutablerBlockPos.translate(dx, dy, dz);
-							if(attemptGeneration(world, mutablerBlockPos)){
+							if(attemptGeneration(world, cluster.x + dx, cluster.y + dy, cluster.z + dz)){
 								generated = true;
 							}
-							mutablerBlockPos.translate(-dx, -dy, -dz);
 						}
 					}
 				}
@@ -82,8 +78,9 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 		return generated;
 	}
 
-	private boolean attemptGeneration(World world, BlockPos posAt){
-		final IBlockState stateAt = world.getBlockState(posAt);
+	private boolean attemptGeneration(World world, int x, int y, int z){
+		final Chunk chunk = world.getChunk(x >> 4, z >> 4);
+		final IBlockState stateAt = chunk.getBlockState(x, y, z);
 
 		// Do checks specific to the individual block pos that is getting replaced
 		if (stateAt.getBlock() instanceof BlockRockVariant)
@@ -91,7 +88,9 @@ public class TFCTFUDVeinCluster extends Vein implements IVeinExpansion {
 			final BlockRockVariant blockAt = (BlockRockVariant) stateAt.getBlock();
 			if (blockAt.getType() == Rock.Type.RAW && this.canSpawnIn(blockAt.getRock()))
 			{
-				world.setBlockState(posAt, this.getOreState(blockAt.getRock()), 2);
+				//Since BlockPos#toImmutable is called, this allocation does not incur additional cost
+				BlockPos pos = new BlockPos(x, y, z);
+				world.setBlockState(pos, this.getOreState(blockAt.getRock()), 2);
 				return true;
 			}
 		}
