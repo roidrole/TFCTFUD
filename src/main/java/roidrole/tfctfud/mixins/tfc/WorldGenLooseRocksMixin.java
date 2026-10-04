@@ -30,7 +30,8 @@ public abstract class WorldGenLooseRocksMixin {
 		at = @At(
 			value = "INVOKE",
 			target = "Lnet/minecraft/world/World;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z"
-		)
+		),
+		remap = true
 	)
 	private boolean noUnconditionalBlockstatePlacing(World instance, BlockPos pos, IBlockState newState, int flags){
 		//No-op
