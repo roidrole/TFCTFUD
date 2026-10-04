@@ -9,7 +9,7 @@ import java.util.List;
 public class TFCTFUDMixinLoader implements ILateMixinLoader {
 	@Override
 	public List<String> getMixinConfigs() {
-		ArrayList<String> mixinConfigs = new ArrayList<>(4);
+		ArrayList<String> mixinConfigs = new ArrayList<>(11);
 		if(TFCTFUDConfig.calendarShutUp){
 			addMixinConf(mixinConfigs, "calendar_shut_up");
 		}
